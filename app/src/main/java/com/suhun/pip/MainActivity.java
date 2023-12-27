@@ -11,6 +11,7 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
 
@@ -64,6 +65,11 @@ public class MainActivity extends AppCompatActivity {
         }, 0, 1000);
     }
     private void initVideoPlay(){
+        //set media controller start
+        MediaController mediaController = new MediaController(this);
+        mediaController.setAnchorView(videoView);
+        videoView.setMediaController(mediaController);
+        //set media controller end
         String path = "android.resource://" + getPackageName() + "/" + R.raw.test12345;
         videoView.setVideoURI(Uri.parse(path));
         videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
