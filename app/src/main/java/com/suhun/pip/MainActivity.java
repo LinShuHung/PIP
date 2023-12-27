@@ -3,12 +3,14 @@ package com.suhun.pip;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.PictureInPictureParams;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.util.Rational;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.MediaController;
@@ -80,5 +82,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         counterFrame.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected void onUserLeaveHint() {
+        super.onUserLeaveHint();
+        try{
+            Rational rational = new Rational(videoView.getWidth(), videoView.getHeight());
+            PictureInPictureParams pipParams = new PictureInPictureParams.Builder().setAspectRatio(rational)
+                                                                                   .build();
+            enterPictureInPictureMode(pipParams);
+
+        }catch(Exception e){
+            Log.d(tag, "----Error exception in onUserLeaveHint----"+ e.toString());
+        }
     }
 }
