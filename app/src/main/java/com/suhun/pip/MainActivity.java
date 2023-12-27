@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private Timer timer;
     private int counter;
     private UIHandler uiHandler;
+    private boolean isPip;
 
     private class UIHandler extends Handler{
         @Override
@@ -60,9 +61,10 @@ public class MainActivity extends AppCompatActivity {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                counter++;
-                uiHandler.sendEmptyMessage(0);
-
+                if(isPip){
+                    counter++;
+                    uiHandler.sendEmptyMessage(0);
+                }
             }
         }, 0, 1000);
     }
@@ -96,5 +98,13 @@ public class MainActivity extends AppCompatActivity {
         }catch(Exception e){
             Log.d(tag, "----Error exception in onUserLeaveHint----"+ e.toString());
         }
+    }
+
+    @Override
+    public void onPictureInPictureModeChanged(boolean isInPictureInPictureMode) {
+        super.onPictureInPictureModeChanged(isInPictureInPictureMode);
+        isPip = isInPictureInPictureMode;
+        videoView.setVisibility(isInPictureInPictureMode?View.GONE:View.VISIBLE);
+        counterFrame.setVisibility(!isInPictureInPictureMode?View.GONE:View.VISIBLE);
     }
 }
