@@ -1,28 +1,62 @@
 package com.suhun.pip;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.VideoView;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
     private String tag = MainActivity.class.getSimpleName();
     private FrameLayout counterFrame;
     private TextView counterView;
     private VideoView videoView;
+    private Timer timer;
+    private int counter;
+    private UIHandler uiHandler;
+
+    private class UIHandler extends Handler{
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            if(msg.what==0){
+                counterView.setText(""+counter);
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
+        initCounter();
     }
 
     private void initView(){
         counterFrame = findViewById(R.id.lid_counterFrame);
         counterView = findViewById(R.id.lid_counterView);
         videoView = findViewById(R.id.lid_videoView);
+    }
+
+    private void initCounter(){
+        timer = new Timer();
+        uiHandler = new UIHandler();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                counter++;
+                uiHandler.sendEmptyMessage(0);
+
+            }
+        }, 0, 1000);
+
     }
 }
